@@ -40,3 +40,17 @@ def get_book_by_id(uid, books):
         if book['id'] == uid:
             return book
     return []
+
+
+def check_input(book):
+    if not book:
+        print('1')
+        return False
+    try:
+        if book['name'] and book['author']:
+            print('2')
+            return True
+    except:
+        print('3')
+        return False
+    return False
