@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, Response, request
 from utils import *
 
 
@@ -16,13 +16,18 @@ def get_book(uid):
 
 @app.route('/create', methods=['POST'])
 def create_book():
-    book = request.get_json()
+    new_book = request.get_json()
     books = read_json(BOOKS_FILE)
-    if not books:
-        id = 0
+    new_id = create_new_id(books)
+    new_book['id'] = new_id
+    new_book['isbn'] = gen_isbn(new_id)
+    books.append(new_book)
+    to_json(BOOKS_FILE, books)
+    # print(books)  # TODO remove
+    return Response(json.dumps(new_book), content_type='application/json'), 201
 
 
 if __name__ == '__main__':
-    # app.run()
+    app.run()
     # print(gen_isbn(17))
-    print(create_new_id([{'id': 10}]))
+    # print(create_new_id([{'id': 10}]))

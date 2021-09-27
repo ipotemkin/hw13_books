@@ -3,7 +3,11 @@ import json
 
 def read_json(filename):
     with open(filename, 'r', encoding='utf-8') as fp:
-        return json.load(fp)
+        try:
+            books = json.load(fp)
+        except:
+            books = []
+        return books
 
 
 def to_json(filename, books):
