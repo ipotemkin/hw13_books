@@ -9,9 +9,12 @@ BOOKS = []
 BOOKS_FILE = 'books.json'
 
 
-@app.route('/books/<uid>')
-def get_book(uid):
-    pass
+@app.route('/books/<int:uid>')
+def get_book(uid: int):
+    books = read_json(BOOKS_FILE)
+    print(books)
+    book = get_book_by_id(uid, books)
+    return Response(json.dumps(book), content_type='application/json'), 200
 
 
 @app.route('/create', methods=['POST'])

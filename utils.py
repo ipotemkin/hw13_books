@@ -33,3 +33,10 @@ def create_new_id(books):
         if book['id'] > max_id:
             max_id = book['id']
     return max_id + 1
+
+
+def get_book_by_id(uid, books):
+    for book in books:
+        if book['id'] == uid:
+            return book
+    return []
