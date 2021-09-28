@@ -8,7 +8,11 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 BOOKS_FILE = 'books.json'
 USING_RAM = True  # to store all data in RAM in BOOKS
-BOOKS = []
+if USING_RAM:
+    BOOKS = read_json(BOOKS_FILE)
+else:
+    BOOKS = []
+
 HTML_WRAP = '<html lang="ru"><meta charset="UTF-8"><p>{}</p></html>'
 
 
@@ -81,8 +85,8 @@ def delete_book(uid: int):
 
 
 if __name__ == '__main__':
-    if USING_RAM:
-        BOOKS = read_json(BOOKS_FILE)
+    # if USING_RAM:
+    #     BOOKS = read_json(BOOKS_FILE)
     app.run()
 
     # DEBUG
