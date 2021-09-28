@@ -34,7 +34,7 @@ def create_book():
     books = read_json(BOOKS_FILE) if not USING_RAM else BOOKS
     new_id = create_new_id(books)
     new_book['id'] = new_id
-    new_book['isbn'] = gen_isbn(new_id)
+    new_book['isbn'] = gen_isbn(new_id, new_book['name'])
     books.append(new_book)
     # if USING_RAM:
     #     BOOKS = books
@@ -44,6 +44,22 @@ def create_book():
     print('BOOKS =', BOOKS)  # TODO remove
     print('BOOKS = books :', BOOKS is books)  # TODO remove
     return Response(json.dumps(new_book, ensure_ascii=False), content_type='application/json'), 201
+
+
+@app.route('/search', methods=['POST'])
+def search_book():
+    books = read_json(BOOKS_FILE) if not USING_RAM else BOOKS
+    what = request.get_json()
+    results = search(list(what.values())[0], list(what.keys())[0], books)
+    print('search_book:')  # TODO remove
+    print('books =', books)  # TODO remove
+    print('BOOKS =', BOOKS)  # TODO remove
+    print('BOOKS = books :', BOOKS is books)  # TODO remove
+    if not results:
+        return Response('По запросу {} ничего не найдено'.format(json.dumps(what, ensure_ascii=False)),
+                        content_type='text/http'), 400
+    return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
+# в Safari вместо руссих букв вылазит абракадабра ((
 
 
 @app.route('/delete/<int:uid>', methods=['DELETE'])
@@ -75,3 +91,6 @@ if __name__ == '__main__':
     # print(check_input({"name": "Name"}))
     # print(check_input({"name": "Name", "author": "Author"}))
 
+    # print(hash("Конан Дойль"))
+    # print(gen_isbn(1))
+    # print(gen_isbn(1, "Конан Дойль"))

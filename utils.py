@@ -15,13 +15,19 @@ def to_json(filename, books):
         json.dump(books, fp, ensure_ascii=False, indent='\t')
 
 
-def gen_isbn(number):
+def gen_isbn(number, name=""):
     s1 = 978
     s2 = 1
     s3 = 266
     s4 = number  # 5 digits
     s5 = 1  # 1 digit (1-4) - control sum
-    format_isbn = "%3s-%1s-%3s-%05d-%1s"
+    if name:
+        # h = hash(name)
+        # h_int = int(str(abs(hash(name)))[:3])
+        s3 = int(str(abs(hash(name)))[:3])
+        # print('hash =', h)
+        # print('int from hash =', h_int)
+    format_isbn = "%3s-%1s-%03d-%05d-%1s"
     return format_isbn % (s1, s2, s3, s4, s5)
 
 
@@ -51,3 +57,8 @@ def check_input(book):
     except:
         return False
     return False
+
+
+def search(word, field, books):
+    word = word.lower()
+    return [book for book in books if (field in book.keys()) and word in book[field].lower()]
