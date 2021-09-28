@@ -1,9 +1,10 @@
 from flask import Flask, Response, request
 from utils import *
+import os
 
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 BOOKS_FILE = 'books.json'
 USING_RAM = True  # to store all data in RAM in BOOKS
