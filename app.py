@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 BOOKS_FILE = 'books.json'
-USING_RAM = True  # to store all data in RAM in BOOKS
+USING_RAM = False  # to store all data in RAM in BOOKS
 BOOKS = []
 
 
