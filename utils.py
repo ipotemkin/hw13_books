@@ -22,11 +22,7 @@ def gen_isbn(number, name=""):
     s4 = number  # 5 digits
     s5 = 1  # 1 digit (1-4) - control sum
     if name:
-        # h = hash(name)
-        # h_int = int(str(abs(hash(name)))[:3])
         s3 = int(str(abs(hash(name)))[:3])
-        # print('hash =', h)
-        # print('int from hash =', h_int)
     format_isbn = "%3s-%1s-%03d-%05d-%1s"
     return format_isbn % (s1, s2, s3, s4, s5)
 
@@ -49,8 +45,6 @@ def get_book_by_id(uid, books):
 
 
 def check_input(book):
-    # if not book:
-    #     return False
     try:
         if book['name'] and book['author']:
             return True
@@ -60,5 +54,7 @@ def check_input(book):
 
 
 def search(word, field, books):
+    if not word:
+        return []
     word = word.lower()
     return [book for book in books if (field in book.keys()) and word in book[field].lower()]

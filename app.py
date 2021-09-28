@@ -24,9 +24,9 @@ def get_book(uid: int):
 def create_book():
     new_book = request.get_json()
     if not check_input(new_book):
-        message = 'Вы ввели {}. Введите книгу в формате {"name": "название", "author": "автор"}'
-        message = message.format(json.dumps(new_book, ensure_ascii=False))
-        return Response(HTML_WRAP.format(message), content_type='text/html'), 400
+        message = 'Вы ввели %s. Введите книгу в формате {"name": "название", "author": "автор"}'
+        return Response(HTML_WRAP.format(message % json.dumps(new_book, ensure_ascii=False)),
+                        content_type='text/html'), 400
     books = read_json(BOOKS_FILE)
     new_id = create_new_id(books)
     new_book['id'] = new_id
