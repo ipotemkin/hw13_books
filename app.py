@@ -74,7 +74,7 @@ def search_book():
 # # в Safari вместо руссих букв вылазит абракадабра на месте json ((
 
 
-@app.route('/delete/<int:uid>', methods=['DELETE'])
+@app.route('/books/<int:uid>', methods=['DELETE'])
 def delete_book(uid: int):
     books = read_json(BOOKS_FILE)
     book = get_book_by_id(uid, books)
