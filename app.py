@@ -48,6 +48,7 @@ def create_book():
     return Response(json.dumps(new_book, ensure_ascii=False), content_type='application/json'), 201
 
 
+# to search a book's record
 @app.route('/books/search', methods=['GET'])
 @app.route('/books/search/', methods=['GET'])
 def search_book():
@@ -74,6 +75,7 @@ def search_book():
 # # в Safari вместо руссих букв вылазит абракадабра на месте json ((
 
 
+# to delete a book's record
 @app.route('/books/<int:uid>', methods=['DELETE'])
 def delete_book(uid: int):
     books = read_json(BOOKS_FILE)
