@@ -48,13 +48,15 @@ def create_book():
     return Response(json.dumps(new_book, ensure_ascii=False), content_type='application/json'), 201
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/books/search', methods=['GET'])
+@app.route('/books/search/', methods=['GET'])
 def search_book():
+    what = dict(request.args)
     books = read_json(BOOKS_FILE)
-    what = request.get_json()
-    results = search(list(what.values())[0], list(what.keys())[0], books)
+    results = search2(what, books)
     if not results:
-        return Response('По запросу {} ничего не найдено'.format(json.dumps(what, ensure_ascii=False)),
+        message = 'По запросу %s ничего не найдено'
+        return Response(HTML_WRAP.format(message % json.dumps(what, ensure_ascii=False)),
                         content_type='text/html'), 204
     return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
 # в Safari вместо руссих букв вылазит абракадабра на месте json ((

@@ -45,11 +45,8 @@ def get_book_by_id(uid, books):
 
 
 def check_input(book):
-    try:
-        if book['name'] and book['author']:
-            return True
-    except:
-        return False
+    if book.get('name', "") and book.get('author', ""):
+        return True
     return False
 
 
@@ -58,3 +55,30 @@ def search(word, field, books):
         return []
     word = word.lower()
     return [book for book in books if (field in book.keys()) and word in book[field].lower()]
+
+
+def search2(what: dict, books):
+    # checking whether what is empty
+    if not what:
+        return []
+
+    # checking whether no searching values - empty strings
+    if len(''.join(what.values())) < 1:
+        return []
+
+    # genuine search
+    # making case insensitive
+    # using a new variable to not erase what for future needs
+    new_what = {key.lower(): str(value).lower() for key, value in what.items()}
+
+    # searching only all searching strings met
+    results = []
+    for book in books:
+        results_line = {}
+        for field in new_what.keys():
+            if field in book.keys():
+                if new_what[field] in str(book[field]).lower():
+                    results_line[field] = book[field]
+        if len(results_line.keys()) == len(what.keys()):
+            results.append(book)
+    return results
