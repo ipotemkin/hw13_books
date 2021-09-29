@@ -10,6 +10,7 @@ BOOKS_FILE = 'books.json'
 HTML_WRAP = '<html lang="ru"><meta charset="UTF-8"><p>{}</p></html>'
 
 
+# to show all books
 @app.route('/books')
 @app.route('/books/')
 def get_all_books():
@@ -18,6 +19,7 @@ def get_all_books():
 # в Safari вместо руссих букв вылазит абракадабра ((
 
 
+# to show a book by id
 @app.route('/books/<int:uid>')
 def get_book(uid: int):
     books = read_json(BOOKS_FILE)
@@ -28,7 +30,9 @@ def get_book(uid: int):
 # в Safari вместо руссих букв вылазит абракадабра ((
 
 
-@app.route('/create', methods=['POST'])
+# to create a book's record
+@app.route('/books', methods=['POST'])
+@app.route('/books/', methods=['POST'])
 def create_book():
     new_book = request.get_json()
     if not check_input(new_book):
@@ -54,6 +58,18 @@ def search_book():
                         content_type='text/html'), 204
     return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
 # в Safari вместо руссих букв вылазит абракадабра на месте json ((
+
+
+# @app.route('/search', methods=['POST'])
+# def search_book():
+#     books = read_json(BOOKS_FILE)
+#     what = request.get_json()
+#     results = search(list(what.values())[0], list(what.keys())[0], books)
+#     if not results:
+#         return Response('По запросу {} ничего не найдено'.format(json.dumps(what, ensure_ascii=False)),
+#                         content_type='text/html'), 204
+#     return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
+# # в Safari вместо руссих букв вылазит абракадабра на месте json ((
 
 
 @app.route('/delete/<int:uid>', methods=['DELETE'])
