@@ -7,18 +7,19 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 books = Books('books.json')
-books.read_json()
 
 
 # to show all books
 @app.route('/books/')
 def get_all_books():
+    books.read_json()
     return Response(json.dumps(books(), ensure_ascii=False), content_type='application/json'), 200
 
 
 # to show a book by id
 @app.route('/books/<int:uid>')
 def get_book(uid: int):
+    books.read_json()
     book = books.get_book_by_id(uid)
     if not book:
         return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
@@ -29,6 +30,7 @@ def get_book(uid: int):
 @app.route('/books/', methods=['POST'])
 def create_book():
     new_book = request.get_json()
+    books.read_json()
     if not books.check_input(new_book):
         return Response(json.dumps({'error': 'Bad request'}), content_type='application/json'), 400
     books.add_new_book(new_book)
@@ -39,6 +41,7 @@ def create_book():
 # to search a book's record
 @app.route('/books/search/', methods=['GET'])
 def search_book():
+    books.read_json()
     results = books.search(dict(request.args))
     if not results:
         return "", 204
@@ -48,6 +51,7 @@ def search_book():
 # to delete a book's record
 @app.route('/books/<int:uid>', methods=['DELETE'])
 def delete_book(uid: int):
+    books.read_json()
     if not books.remove_book_by_id(uid):
         return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
     books.to_json()
