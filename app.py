@@ -6,6 +6,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+books = Books('books.json')
+books.read_json()
 
 
 # to show all books
@@ -52,7 +54,7 @@ def delete_book(uid: int):
     return Response(json.dumps({'status': 'Deleted'}, ensure_ascii=False), content_type='application/json'), 200
 
 
-if __name__ == '__main__':
-    books = Books('books.json')
-    books.read_json()
-    app.run()
+# if __name__ == '__main__':
+# books = Books('books.json')
+# books.read_json()
+app.run()
