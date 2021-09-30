@@ -22,7 +22,7 @@ def get_book(uid: int):
     books = read_json(BOOKS_FILE)
     book = get_book_by_id(uid, books)
     if not book:
-        return Response(json.dumps({'error': 'Bad request'}), content_type='application/json'), 400
+        return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
     return Response(json.dumps(book, ensure_ascii=False), content_type='application/json'), 200
 
 
