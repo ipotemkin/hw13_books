@@ -59,6 +59,4 @@ def delete_book(uid: int):
 
 
 if __name__ == '__main__':
-# books = Books('books.json')
-# books.read_json()
     app.run()
