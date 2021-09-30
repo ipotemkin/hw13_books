@@ -11,7 +11,6 @@ HTML_WRAP = '<html lang="ru"><meta charset="UTF-8"><p>{}</p></html>'
 
 
 # to show all books
-@app.route('/books')
 @app.route('/books/')
 def get_all_books():
     books = read_json(BOOKS_FILE)
@@ -31,7 +30,6 @@ def get_book(uid: int):
 
 
 # to create a book's record
-@app.route('/books', methods=['POST'])
 @app.route('/books/', methods=['POST'])
 def create_book():
     new_book = request.get_json()
@@ -49,7 +47,6 @@ def create_book():
 
 
 # to search a book's record
-@app.route('/books/search', methods=['GET'])
 @app.route('/books/search/', methods=['GET'])
 def search_book():
     what = dict(request.args)
