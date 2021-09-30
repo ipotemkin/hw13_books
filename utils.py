@@ -50,12 +50,12 @@ def check_input(book):
     return False
 
 
-def search(word, field, books):
-    if not word:
-        return []
-    word = word.lower()
-    return [book for book in books if (field in book.keys()) and word in book[field].lower()]
-
+# def search(word, field, books):
+#     if not word:
+#         return []
+#     word = word.lower()
+#     return [book for book in books if (field in book.keys()) and word in book[field].lower()]
+#
 
 def search2(what: dict, books):
     # checking whether what is empty
