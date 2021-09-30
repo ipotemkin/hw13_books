@@ -7,7 +7,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 BOOKS_FILE = 'books.json'
-HTML_WRAP = '<html lang="ru"><meta charset="UTF-8"><p>{}</p></html>'
 
 
 # to show all books
@@ -15,7 +14,6 @@ HTML_WRAP = '<html lang="ru"><meta charset="UTF-8"><p>{}</p></html>'
 def get_all_books():
     books = read_json(BOOKS_FILE)
     return Response(json.dumps(books, ensure_ascii=False), content_type='application/json'), 200
-# в Safari вместо руссих букв вылазит абракадабра ((
 
 
 # to show a book by id
@@ -24,9 +22,8 @@ def get_book(uid: int):
     books = read_json(BOOKS_FILE)
     book = get_book_by_id(uid, books)
     if not book:
-        return Response(HTML_WRAP.format('Нет книги с таким кодом'), content_type='text/html'), 400
+        return Response(json.dumps({'error': 'Bad request'}), content_type='application/json'), 400
     return Response(json.dumps(book, ensure_ascii=False), content_type='application/json'), 200
-# в Safari вместо руссих букв вылазит абракадабра ((
 
 
 # to create a book's record
@@ -34,9 +31,7 @@ def get_book(uid: int):
 def create_book():
     new_book = request.get_json()
     if not check_input(new_book):
-        message = 'Вы ввели %s. Введите книгу в формате {"name": "название", "author": "автор"}'
-        return Response(HTML_WRAP.format(message % json.dumps(new_book, ensure_ascii=False)),
-                        content_type='text/html'), 400
+        return Response(json.dumps({'error': 'Bad request'}), content_type='application/json'), 400
     books = read_json(BOOKS_FILE)
     new_id = create_new_id(books)
     new_book['id'] = new_id
@@ -53,23 +48,8 @@ def search_book():
     books = read_json(BOOKS_FILE)
     results = search2(what, books)
     if not results:
-        message = 'По запросу %s ничего не найдено'
-        return Response(HTML_WRAP.format(message % json.dumps(what, ensure_ascii=False)),
-                        content_type='text/html'), 204
+        return "", 204
     return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
-# в Safari вместо руссих букв вылазит абракадабра на месте json ((
-
-
-# @app.route('/search', methods=['POST'])
-# def search_book():
-#     books = read_json(BOOKS_FILE)
-#     what = request.get_json()
-#     results = search(list(what.values())[0], list(what.keys())[0], books)
-#     if not results:
-#         return Response('По запросу {} ничего не найдено'.format(json.dumps(what, ensure_ascii=False)),
-#                         content_type='text/html'), 204
-#     return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
-# # в Safari вместо руссих букв вылазит абракадабра на месте json ((
 
 
 # to delete a book's record
@@ -78,10 +58,10 @@ def delete_book(uid: int):
     books = read_json(BOOKS_FILE)
     book = get_book_by_id(uid, books)
     if not book:
-        return Response(HTML_WRAP.format('Нет книги с таким кодом'), content_type='text/html'), 404
+        return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
     books.remove(book)
     to_json(BOOKS_FILE, books)
-    return Response(json.dumps(book, ensure_ascii=False) + ' deleted', content_type='text/html'), 200
+    return Response(json.dumps({'status': 'Deleted'}, ensure_ascii=False), content_type='application/json'), 200
 
 
 if __name__ == '__main__':
