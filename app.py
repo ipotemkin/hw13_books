@@ -54,7 +54,7 @@ def delete_book(uid: int):
     return Response(json.dumps({'status': 'Deleted'}, ensure_ascii=False), content_type='application/json'), 200
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 # books = Books('books.json')
 # books.read_json()
-app.run()
+    app.run()
