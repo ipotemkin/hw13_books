@@ -1,11 +1,12 @@
 from books import Books
-from flask import Flask, Response, request
+from flask import Flask, Response, request, jsonify
 import json
 import os
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JSON_AS_ASCII'] = False
 books = Books('books.json')
 
 
@@ -13,7 +14,7 @@ books = Books('books.json')
 @app.route('/books/')
 def get_all_books():
     books.read_json()
-    return Response(json.dumps(books(), ensure_ascii=False), content_type='application/json'), 200
+    return jsonify(books()), 200
 
 
 # to show a book by id
