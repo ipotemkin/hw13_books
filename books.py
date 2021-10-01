@@ -82,9 +82,8 @@ class Books:
         for book in self.books:
             results_line = {}
             for field in new_what.keys():
-                if field in book.keys():
-                    if new_what[field] in str(book[field]).lower():
-                        results_line[field] = book[field]
+                if field in book.keys() and new_what[field] in str(book[field]).lower():
+                    results_line[field] = book[field]
             if len(results_line.keys()) == len(what.keys()):
                 results.append(book)
         return results
