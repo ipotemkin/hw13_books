@@ -89,5 +89,7 @@ class Books:
                 results.append(book)
         return results
 
-    def __call__(self):
+    def __call__(self, uid=''):
+        if uid:
+            return self.get_book_by_id(uid)
         return self.books
