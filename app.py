@@ -1,6 +1,5 @@
 from books import Books
-from flask import Flask, Response, request, jsonify
-import json
+from flask import Flask, request, jsonify
 import os
 
 
@@ -23,8 +22,8 @@ def get_book(uid: int):
     books.read_json()
     book = books(uid)
     if not book:
-        return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
-    return Response(json.dumps(book, ensure_ascii=False), content_type='application/json'), 200
+        return jsonify(errors={'error': 'Not found'}), 404
+    return jsonify(book), 200
 
 
 # to create a book's record
@@ -33,10 +32,10 @@ def create_book():
     new_book = request.get_json()
     books.read_json()
     if not books.check_input(new_book):
-        return Response(json.dumps({'error': 'Bad request'}), content_type='application/json'), 400
+        return jsonify(errors={'error': 'Bad request'}), 400
     books.add_new_book(new_book)
     books.to_json()
-    return Response(json.dumps(new_book, ensure_ascii=False), content_type='application/json'), 201
+    return jsonify(new_book), 201
 
 
 # to search a book's record
@@ -46,7 +45,7 @@ def search_book():
     results = books.search(dict(request.args))
     if not results:
         return "", 204
-    return Response(json.dumps(results, ensure_ascii=False), content_type='application/json'), 200
+    return jsonify(results), 200
 
 
 # to delete a book's record
@@ -54,9 +53,9 @@ def search_book():
 def delete_book(uid: int):
     books.read_json()
     if not books.remove_book_by_id(uid):
-        return Response(json.dumps({'error': 'Not found'}), content_type='application/json'), 404
+        return jsonify(errors={'error': 'Not found'}), 404
     books.to_json()
-    return Response(json.dumps({'status': 'Deleted'}, ensure_ascii=False), content_type='application/json'), 200
+    return jsonify({'status': 'Deleted'}), 200
 
 
 if __name__ == '__main__':
