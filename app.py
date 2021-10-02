@@ -58,5 +58,16 @@ def delete_book(uid: int):
     return jsonify({'status': 'Deleted'})
 
 
+# to update a book's record
+@app.route('/books/<int:uid>', methods=['PUT'])
+def update_book(uid: int):
+    new_book = request.get_json()
+    books.read_json()
+    if books.check_input(new_book) and books.update(uid, new_book):
+        books.to_json()
+        return jsonify(books(uid))
+    return jsonify(errors={'error': 'Bad request'}), 400
+
+
 if __name__ == '__main__':
     app.run()

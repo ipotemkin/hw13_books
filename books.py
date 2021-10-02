@@ -45,6 +45,14 @@ class Books:
         self.books.append(new_book)
         self.max_id += 1
 
+    def update(self, uid, new_book: dict):
+        book = self.get_book_by_id(uid)
+        if not book:
+            return False
+        book['name'] = new_book['name']
+        book['author'] = new_book['author']
+        return True
+
     def remove_book_by_id(self, uid):
         book = self.get_book_by_id(uid)
         if book:
