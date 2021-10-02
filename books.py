@@ -28,7 +28,8 @@ class Books:
         with open(self.json_file, 'w', encoding='utf-8') as fp:
             json.dump(self.books, fp, ensure_ascii=False, indent='\t')
 
-    def gen_isbn(self, number, name=""):
+    @staticmethod
+    def gen_isbn(number, name=""):
         s1 = 978
         s2 = 1
         s3 = 266
@@ -66,7 +67,8 @@ class Books:
                 return book
         return []
 
-    def check_input(self, book):
+    @staticmethod
+    def check_input(book):
         if book.get('name', "") and book.get('author', ""):
             return True
         return False
