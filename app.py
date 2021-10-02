@@ -13,7 +13,7 @@ books = Books('books.json')
 @app.route('/books/')
 def get_all_books():
     books.read_json()
-    return jsonify(books()), 200
+    return jsonify(books())
 
 
 # to show a book by id
@@ -23,7 +23,7 @@ def get_book(uid: int):
     book = books(uid)
     if not book:
         return jsonify(errors={'error': 'Not found'}), 404
-    return jsonify(book), 200
+    return jsonify(book)
 
 
 # to create a book's record
@@ -45,7 +45,7 @@ def search_book():
     results = books.search(dict(request.args))
     if not results:
         return "", 204
-    return jsonify(results), 200
+    return jsonify(results)
 
 
 # to delete a book's record
@@ -55,7 +55,7 @@ def delete_book(uid: int):
     if not books.remove_book_by_id(uid):
         return jsonify(errors={'error': 'Not found'}), 404
     books.to_json()
-    return jsonify({'status': 'Deleted'}), 200
+    return jsonify({'status': 'Deleted'})
 
 
 if __name__ == '__main__':
