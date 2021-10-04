@@ -38,7 +38,6 @@ def get_book(uid: int):
 def create_book():
     new_book = request.get_json()
     books.read_json()
-    books.check_input(new_book)
     books.add_new_book(new_book)
     books.to_json()
     return jsonify(new_book), 201
@@ -66,10 +65,8 @@ def delete_book(uid: int):
 # to update a book's record
 @app.route('/books/<int:uid>', methods=['PUT'])
 def update_book(uid: int):
-    new_book = request.get_json()
     books.read_json()
-    books.check_input(new_book)
-    books.update(uid, new_book)
+    books.update(uid, request.get_json())
     books.to_json()
     return jsonify(books(uid))
 

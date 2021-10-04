@@ -46,12 +46,14 @@ class Books:
         return format_isbn % (s1, s2, s3, s4, s5)
 
     def add_new_book(self, new_book):
+        self.check_input(new_book)
         new_book['id'] = self.max_id + 1
         new_book['isbn'] = self.gen_isbn(new_book['id'], new_book['name'])
         self.books.append(new_book)
         self.max_id += 1
 
     def update(self, uid, new_book: dict):
+        self.check_input(new_book)
         book = self.get_book_by_id(uid)
         book['name'] = new_book['name']
         book['author'] = new_book['author']
