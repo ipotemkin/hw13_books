@@ -1,5 +1,5 @@
 import json
-from errors import ValidationError
+from errors import ValidationError, NotFoundError
 
 
 class Books:
@@ -70,13 +70,9 @@ class Books:
         raise ValidationError
 
     def search(self, what: dict):
-        # checking whether what is empty
-        if not what:
-            return []
-
-        # checking whether no searching values - empty strings
-        if len(''.join(what.values())) < 1:
-            return []
+        # checking whether what is empty or whether no searching values - empty strings
+        if not what or not ''.join(what.values()):
+            raise ValidationError
 
         # genuine search
         # making case insensitive
@@ -86,13 +82,13 @@ class Books:
         # searching only all searching strings met
         results = []
         for book in self.books:
-            results_line = {}
-            for field in new_what.keys():
-                if field in book.keys() and new_what[field] in str(book[field]).lower():
-                    results_line[field] = book[field]
+            results_line = {field: book[field] for field in new_what.keys()
+                            if field in book.keys() and (new_what[field] in str(book[field]).lower())}
             if len(results_line.keys()) == len(what.keys()):
                 results.append(book)
-        return results
+        if results:
+            return results
+        raise NotFoundError
 
     def __call__(self, uid='all'):
         return self.books if uid == 'all' else self.get_book_by_id(uid)

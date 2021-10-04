@@ -1,4 +1,5 @@
-from books import Books, ValidationError
+from books import Books
+from errors import NotFoundError, ValidationError
 from flask import Flask, request, jsonify
 import os
 
@@ -17,6 +18,11 @@ def not_found_error(error: IndexError):
 @app.errorhandler(ValidationError)
 def bad_request_error(error: ValidationError):
     return jsonify({'error': 'Bad request'}), 400
+
+
+@app.errorhandler(NotFoundError)
+def bad_request_error(error: NotFoundError):
+    return '', 204
 
 
 # to show all books
@@ -48,8 +54,8 @@ def create_book():
 def search_book():
     books.read_json()
     results = books.search(dict(request.args))
-    if not results:
-        return "", 204
+    # if not results:
+    #     return "", 204
     return jsonify(results)
 
 
