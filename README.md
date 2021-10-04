@@ -6,7 +6,73 @@ A simple web API application - finishing Module 2 of PD
 
 Functions realized:
 ---
-1. GET /books/n where n is a book's id - to get information about the book
-2. POST /create {"name": "", "author": ""} - to create a book's record
-3. POST /search {"name": "word to search"}, {"author": "word to search"} - to find a book's record
-4. DELETE /delete/n where n is a book's id - to delete the book's record
+
+> Get all books
+>> `GET /books/`
+> ```json
+> [{
+>  "author": "Джоан Роулинг", 
+>  "id": 1, 
+>  "isbn": "978-1-266-00001-1", 
+>  "name": "Гарри Потер"
+> },
+> {
+>  "name": "Гарри Потер",
+>  "author": "Джоан Роулинг",
+>  "id": 2,
+>  "isbn": "978-1-266-00002-1"
+> }]
+>```
+
+
+
+> Get a book by ID
+>> `GET /books/ID`
+> ```json
+> {
+>  "author": "Джоан Роулинг", 
+>  "id": 1, 
+>  "isbn": "978-1-266-00001-1", 
+>  "name": "Гарри Потер"
+> }
+>```
+
+> Create a book
+>> `POST /books/`
+> ```json
+> {
+>  "author": "Джоан Роулинг", 
+>  "name": "Гарри Потер"
+> }
+>```
+
+> Find a book
+>> `GET /books/search/?name=потер&author=`
+> ```json
+> {
+>  "author": "Джоан Роулинг", 
+>  "id": 1, 
+>  "isbn": "978-1-266-00001-1", 
+>  "name": "Гарри Потер"
+> }
+>```
+
+> Delete a book by ID
+>> `DELETE /books/ID`
+> ```json
+> {
+>  "author": "Джоан Роулинг", 
+>  "id": 1, 
+>  "isbn": "978-1-266-00001-1", 
+>  "name": "Гарри Потер"
+> }
+>```
+
+> Update a book
+>> `PUT /books/ID`
+> ```json
+> {
+>  "author": "Джоан Роулинг", 
+>  "name": "Гарри Потер"
+> }
+>```
