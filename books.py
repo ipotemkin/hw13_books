@@ -1,6 +1,11 @@
 import json
 
 
+class ValidationError(Exception):
+    pass
+    # ({'error': 'Bad request'})
+
+
 class Books:
 
     def __init__(self, json_file):
@@ -48,30 +53,23 @@ class Books:
 
     def update(self, uid, new_book: dict):
         book = self.get_book_by_id(uid)
-        if not book:
-            return False
         book['name'] = new_book['name']
         book['author'] = new_book['author']
-        return True
 
     def remove_book_by_id(self, uid):
-        book = self.get_book_by_id(uid)
-        if book:
-            self.books.remove(book)
-            return True
-        return False
+        self.books.remove(self.get_book_by_id(uid))
 
     def get_book_by_id(self, uid):
         for book in self.books:
             if book['id'] == uid:
                 return book
-        return []
+        raise IndexError
 
     @staticmethod
     def check_input(book):
         if book.get('name', "") and book.get('author', ""):
             return True
-        return False
+        raise ValidationError
 
     def search(self, what: dict):
         # checking whether what is empty

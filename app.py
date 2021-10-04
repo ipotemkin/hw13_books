@@ -1,4 +1,4 @@
-from books import Books
+from books import Books, ValidationError
 from flask import Flask, request, jsonify
 import os
 
@@ -7,6 +7,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
 books = Books('books.json')
+
+
+@app.errorhandler(IndexError)
+def not_found_error(error: IndexError):
+    return jsonify({'error': 'Not found'}), 404
+
+
+@app.errorhandler(ValidationError)
+def bad_request_error(error: ValidationError):
+    return jsonify({'error': 'Bad request'}), 400
 
 
 # to show all books
@@ -20,10 +30,7 @@ def get_all_books():
 @app.route('/books/<int:uid>')
 def get_book(uid: int):
     books.read_json()
-    book = books(uid)
-    if not book:
-        return jsonify(errors={'error': 'Not found'}), 404
-    return jsonify(book)
+    return jsonify(books(uid))
 
 
 # to create a book's record
@@ -31,8 +38,7 @@ def get_book(uid: int):
 def create_book():
     new_book = request.get_json()
     books.read_json()
-    if not books.check_input(new_book):
-        return jsonify(errors={'error': 'Bad request'}), 400
+    books.check_input(new_book)
     books.add_new_book(new_book)
     books.to_json()
     return jsonify(new_book), 201
@@ -52,8 +58,7 @@ def search_book():
 @app.route('/books/<int:uid>', methods=['DELETE'])
 def delete_book(uid: int):
     books.read_json()
-    if not books.remove_book_by_id(uid):
-        return jsonify(errors={'error': 'Not found'}), 404
+    books.remove_book_by_id(uid)
     books.to_json()
     return jsonify({'status': 'Deleted'})
 
@@ -63,10 +68,10 @@ def delete_book(uid: int):
 def update_book(uid: int):
     new_book = request.get_json()
     books.read_json()
-    if books.check_input(new_book) and books.update(uid, new_book):
-        books.to_json()
-        return jsonify(books(uid))
-    return jsonify(errors={'error': 'Bad request'}), 400
+    books.check_input(new_book)
+    books.update(uid, new_book)
+    books.to_json()
+    return jsonify(books(uid))
 
 
 if __name__ == '__main__':
