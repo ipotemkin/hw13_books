@@ -53,10 +53,7 @@ def create_book():
 @app.route('/books/search/', methods=['GET'])
 def search_book():
     books.read_json()
-    results = books.search(dict(request.args))
-    # if not results:
-    #     return "", 204
-    return jsonify(results)
+    return jsonify(books.search(dict(request.args)))
 
 
 # to delete a book's record
