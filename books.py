@@ -1,9 +1,5 @@
 import json
-
-
-class ValidationError(Exception):
-    pass
-    # ({'error': 'Bad request'})
+from errors import ValidationError
 
 
 class Books:
