@@ -10,9 +10,13 @@ class Books:
         self.books = []
 
     def read_json(self):
-        with open(self.json_file, 'r', encoding='utf-8') as fp:
-            self.books = json.load(fp)
-            self.set_max_id()
+        try:
+            with open(self.json_file, 'r', encoding='utf-8') as fp:
+                self.books = json.load(fp)
+                self.set_max_id()
+        except FileNotFoundError:
+            self.books = []
+            self.max_id = 0
 
     def set_max_id(self):
         self.max_id = 0
