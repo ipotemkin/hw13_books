@@ -1,6 +1,6 @@
 from __init__ import *
 from books import Books
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from errors import ValidationError, NotFoundError
 
 
@@ -17,6 +17,13 @@ def bad_request_error(error: ValidationError):
 @app.errorhandler(NotFoundError)
 def bad_request_error(error: NotFoundError):
     return '', 204
+
+
+# to show manual
+@app.route('/')
+def index():
+    # return "index.html"
+    return render_template("index.html"), 200
 
 
 # to show all books
