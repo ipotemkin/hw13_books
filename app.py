@@ -1,13 +1,6 @@
-from books import Books
 from errors import NotFoundError, ValidationError
-from flask import Flask, request, jsonify
-import os
-
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['JSON_AS_ASCII'] = False
-books = Books('books.json')
+from flask import request, jsonify
+from __init__ import *
 
 
 @app.errorhandler(IndexError)
